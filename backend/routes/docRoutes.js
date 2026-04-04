@@ -3,7 +3,7 @@ const router = express.Router();
 const multer = require('multer');
 const path = require('path');
 const auth = require('../middleware/authMiddleware');
-const { uploadDocument, getMyDocuments, getPendingDocuments, verifyDocument, getDocumentById } = require('../controllers/docController');
+const { uploadDocument, getMyDocuments, getPendingDocuments, verifyDocument, getDocumentById, getAllDocuments } = require('../controllers/docController');
 
 // Multer Config
 const storage = multer.diskStorage({
@@ -37,7 +37,11 @@ const upload = multer({
 router.post('/upload', auth, upload.single('file'), uploadDocument);
 router.get('/my-documents', auth, getMyDocuments);
 router.get('/pending', auth, getPendingDocuments); // Admin only, add check?
+router.get('/all', auth, getAllDocuments); // Admin only, add check?
 router.get('/:id', auth, getDocumentById);
 router.put('/verify/:id', auth, verifyDocument); // Admin only
+
+// Public Verification Route
+router.get('/verify/:id', require('../controllers/docController').verifyDocumentPublic);
 
 module.exports = router;

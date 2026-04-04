@@ -20,9 +20,13 @@ app.use((req, res, next) => {
 });
 
 // Database Connection
-mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log('MongoDB Connected'))
-    .catch(err => console.error('MongoDB Connection Error:', err));
+const mongoURI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/verificationDB';
+mongoose.connect(mongoURI)
+    .then(() => console.log(`MongoDB Connected to: ${mongoURI}`))
+    .catch(err => {
+        console.error('MongoDB Connection Error:', err);
+        process.exit(1); // Exit if DB connection fails
+    });
 
 // Routes
 app.use('/api/auth', require('./routes/authRoutes'));
@@ -33,6 +37,11 @@ app.use('/api/admin', require('./routes/adminRoutes'));
 app.get('/health', (req, res) => {
     console.log('[HEALTH CHECK] Called');
     res.status(200).send('Server is running');
+});
+
+// Root Route for Easy Browser Check
+app.get('/', (req, res) => {
+    res.status(200).send('API is running on port 5000');
 });
 
 // Serve Uploads

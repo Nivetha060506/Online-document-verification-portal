@@ -19,25 +19,21 @@ const seedData = async () => {
         console.log('Data Cleared');
 
         // Create Admin
-        const salt = await bcrypt.genSalt(10);
-        const adminPassword = await bcrypt.hash('admin123', salt);
         const admin = new Admin({
             email: 'admin@odv.com',
-            password: adminPassword
+            password: 'admin123'
         });
         await admin.save();
         console.log('Admin Created: admin@odv.com / admin123');
 
         // Create Students
-        const studentPassword = await bcrypt.hash('student123', salt);
-
-        const students = await User.insertMany([
+        await User.create([
             {
                 name: 'John Doe',
                 regNo: 'REG001',
                 department: 'Computer Science',
                 email: 'john@student.com',
-                password: studentPassword,
+                password: 'student123',
                 status: 'Active'
             },
             {
@@ -45,7 +41,7 @@ const seedData = async () => {
                 regNo: 'REG002',
                 department: 'Information Technology',
                 email: 'jane@student.com',
-                password: studentPassword,
+                password: 'student123',
                 status: 'Active'
             },
             {
@@ -53,10 +49,11 @@ const seedData = async () => {
                 regNo: 'REG003',
                 department: 'Electronics',
                 email: 'mike@student.com',
-                password: studentPassword,
+                password: 'student123',
                 status: 'Blocked'
             }
         ]);
+        const students = await User.find();
         console.log('Students Created: john@student.com / student123, etc.');
 
         // Create Documents
@@ -70,7 +67,14 @@ const seedData = async () => {
             {
                 studentId: students[0]._id,
                 documentType: 'Marksheet',
-                filePath: 'uploads/sample_marksheet.pdf', // Dummy path
+                firstName: 'John',
+                lastName: 'Doe',
+                email: 'john@student.com',
+                phoneNumber: '1234567890',
+                regNo: 'REG001',
+                department: 'Computer Science',
+                documentId: 'DOC001',
+                filePath: 'uploads/sample_marksheet.pdf',
                 fileHash: 'dummyhash123',
                 status: 'Pending',
                 uploadDate: new Date()
@@ -78,22 +82,36 @@ const seedData = async () => {
             {
                 studentId: students[0]._id,
                 documentType: 'Bonafide',
+                firstName: 'John',
+                lastName: 'Doe',
+                email: 'john@student.com',
+                phoneNumber: '1234567890',
+                regNo: 'REG001',
+                department: 'Computer Science',
+                documentId: 'DOC002',
                 filePath: 'uploads/sample_bonafide.pdf',
                 fileHash: 'dummyhash456',
                 status: 'Approved',
                 adminRemarks: 'Verified successfully',
                 verificationDate: new Date(),
-                uploadDate: new Date(Date.now() - 86400000) // Yesterday
+                uploadDate: new Date(Date.now() - 86400000)
             },
             {
                 studentId: students[1]._id,
                 documentType: 'Degree Certificate',
+                firstName: 'Jane',
+                lastName: 'Smith',
+                email: 'jane@student.com',
+                phoneNumber: '0987654321',
+                regNo: 'REG002',
+                department: 'Information Technology',
+                documentId: 'DOC003',
                 filePath: 'uploads/sample_degree.pdf',
                 fileHash: 'dummyhash789',
                 status: 'Rejected',
                 adminRemarks: 'Image validation failed',
                 verificationDate: new Date(),
-                uploadDate: new Date(Date.now() - 172800000) // 2 days ago
+                uploadDate: new Date(Date.now() - 172800000)
             }
         ]);
         console.log('Documents Created');

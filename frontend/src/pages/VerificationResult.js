@@ -138,6 +138,8 @@ const VerificationResult = () => {
                         <FaShieldAlt className="text-3xl text-white" />
                     </div>
                     <h1 className="text-4xl font-black text-slate-900 tracking-tighter leading-none">Global Verification</h1>
+
+
                     <p className="text-slate-500 font-medium text-sm">Validating institutional integrity through cryptographic proof-of-authenticity.</p>
                 </div>
 
@@ -160,7 +162,7 @@ const VerificationResult = () => {
                                 disabled={loading}
                                 className="w-full py-5 bg-blue-600 text-white rounded-2xl text-[11px] font-black uppercase tracking-[0.4em] hover:bg-blue-700 transition-all active:scale-[0.98] shadow-2xl shadow-blue-500/30 disabled:opacity-50"
                             >
-                                {loading ? 'Scanning Blockchain...' : 'Search Repository'}
+                                {loading ? 'Checking Records...' : 'Search'}
                             </button>
                         </div>
                     </form>
@@ -174,7 +176,7 @@ const VerificationResult = () => {
                                 <FaShieldAlt className="text-blue-100 text-xl" />
                             </div>
                         </div>
-                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">Decrypting Certificate Hash...</p>
+                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">Loading data...</p>
                     </div>
                 )}
 

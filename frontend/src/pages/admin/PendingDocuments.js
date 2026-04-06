@@ -203,49 +203,89 @@ const PendingDocuments = () => {
 
             {/* Premium Review Terminal Modal */}
             {selectedDoc && (
-                <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-xl flex items-center justify-center p-6 z-50 animate-in fade-in duration-300">
-                    <div className="bg-white rounded-[3rem] shadow-2xl w-full max-w-7xl max-h-[90vh] overflow-hidden border border-white/20 flex flex-col scale-in-center">
-                        <div className="px-10 py-6 border-b border-slate-50 flex justify-between items-center bg-slate-50/50">
+                <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-xl flex items-center justify-center p-4 lg:p-10 z-50 animate-in fade-in duration-300">
+                    <div className="bg-white rounded-[2rem] lg:rounded-[3rem] shadow-2xl w-full max-w-[1600px] h-full lg:h-[90vh] overflow-hidden border border-white/20 flex flex-col scale-in-center">
+                        <div className="px-6 lg:px-10 py-6 border-b border-slate-50 flex justify-between items-center bg-white">
                             <div className="flex items-center space-x-4">
-                                <button onClick={() => setSelectedDoc(null)} className="p-3 bg-white hover:bg-slate-100 rounded-2xl transition-all shadow-sm">
+                                <button onClick={() => setSelectedDoc(null)} className="p-3 bg-slate-50 hover:bg-slate-100 rounded-2xl transition-all shadow-sm">
                                     <FaArrowLeft className="text-slate-400" />
                                 </button>
                                 <div>
-                                    <h2 className="text-2xl font-black text-slate-900 tracking-tight uppercase">Validation Protocol</h2>
-                                    <p className="text-[10px] text-slate-400 font-black tracking-[0.2em] mt-1 flex items-center">
-                                        <FaShieldAlt className="mr-2 text-blue-500" /> SECURE SESSION ACTIVE • 0x{selectedDoc._id.slice(-8).toUpperCase()}
+                                    <h2 className="text-xl lg:text-2xl font-black text-slate-900 tracking-tight uppercase leading-none">Document Verification Console</h2>
+                                    <p className="text-[9px] text-slate-400 font-black tracking-[0.2em] mt-2 flex items-center">
+                                        <FaShieldAlt className="mr-2 text-blue-500" /> SECURE AUDIT IN PROGRESS • SESSION_{selectedDoc._id.slice(-6).toUpperCase()}
                                     </p>
                                 </div>
                             </div>
-                            <button onClick={() => setSelectedDoc(null)} className="w-12 h-12 flex items-center justify-center bg-slate-100 hover:bg-rose-50 hover:text-rose-500 rounded-2xl transition-all text-slate-400 font-bold">✕</button>
+                            <button onClick={() => setSelectedDoc(null)} className="w-10 h-10 lg:w-12 lg:h-12 flex items-center justify-center bg-slate-50 hover:bg-rose-50 hover:text-rose-500 rounded-2xl transition-all text-slate-400 font-bold">✕</button>
                         </div>
-
+                        
                         <div className="flex-1 overflow-hidden flex flex-col lg:flex-row">
-                            {/* Left: Interactive Terminal */}
-                            <div className="lg:w-[450px] overflow-y-auto p-10 space-y-12 border-r border-slate-50 modern-scrollbar">
+                            {/* Left: Document Preview (65% Width) */}
+                            <div className="lg:w-[65%] h-[50vh] lg:h-full bg-slate-50 p-4 lg:p-8 flex flex-col border-r border-slate-100">
+                                <div className="flex items-center justify-between mb-4">
+                                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] flex items-center">
+                                        <span className="w-2 h-2 bg-blue-500 rounded-full mr-2 animate-pulse"></span>
+                                        Live Certificate Preview
+                                    </span>
+                                    <div className="flex space-x-4">
+                                        <div className="flex items-center space-x-1">
+                                            <div className="w-2 h-2 rounded-full bg-slate-300"></div>
+                                            <span className="text-[9px] font-bold text-slate-300 uppercase">FITTED</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div className="flex-1 bg-white rounded-[1.5rem] lg:rounded-[2.5rem] border border-slate-200 shadow-xl overflow-hidden flex items-center justify-center relative group">
+                                    <div className="absolute inset-0 bg-slate-900 opacity-0 group-hover:opacity-5 transition-opacity pointer-events-none"></div>
+                                    {selectedDoc.filePath.endsWith('.pdf') ? (
+                                        <iframe 
+                                            src={`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/${selectedDoc.filePath}#toolbar=0&navpanes=0`} 
+                                            className="w-full h-full border-none" 
+                                            title="Document Viewport"
+                                        ></iframe>
+                                    ) : (
+                                        <div className="w-full h-full p-4 flex items-center justify-center overflow-auto custom-scrollbar">
+                                            <img 
+                                                src={`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/${selectedDoc.filePath}`} 
+                                                alt="Document" 
+                                                className="max-w-full max-h-full object-contain shadow-2xl transition-transform duration-500 hover:scale-[1.5] origin-center cursor-zoom-in" 
+                                            />
+                                        </div>
+                                    )}
+                                    <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <div className="px-3 py-1.5 bg-slate-900/80 backdrop-blur-md rounded-lg text-[8px] font-black text-white uppercase tracking-widest border border-white/10">
+                                            High-Resolution Scan
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Right: Actions & Metadata (35% Width) */}
+                            <div className="lg:w-[35%] overflow-y-auto p-6 lg:p-10 space-y-10 modern-scrollbar bg-white">
                                 <div className="space-y-10">
                                     <section className="space-y-6">
                                         <div className="flex items-center space-x-3 pb-3 border-b border-slate-50">
                                             <FaUser className="text-blue-600" />
-                                            <h3 className="text-xs font-black uppercase tracking-widest text-slate-900">Affiliate Context</h3>
+                                            <h3 className="text-[11px] font-black uppercase tracking-widest text-slate-900">Student Profile</h3>
                                         </div>
-                                        <div className="grid grid-cols-1 gap-6">
-                                            <div className="bg-slate-50/50 p-4 rounded-2xl border border-slate-100">
-                                                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-1">Full Identity</span>
-                                                <p className="font-black text-slate-900 text-sm uppercase">{selectedDoc.studentName || `${selectedDoc.firstName} ${selectedDoc.lastName}`}</p>
+                                        <div className="grid grid-cols-1 gap-4">
+                                            <div className="bg-blue-50/50 p-5 rounded-2xl border border-blue-100/50">
+                                                <span className="text-[9px] font-black text-blue-400 uppercase tracking-widest block mb-1">Full Name</span>
+                                                <p className="font-black text-slate-900 text-base">{selectedDoc.studentName || `${selectedDoc.firstName} ${selectedDoc.lastName}`}</p>
                                             </div>
                                             <div className="grid grid-cols-2 gap-4">
-                                                <div className="bg-slate-50/50 p-4 rounded-2xl border border-slate-100">
-                                                    <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-1">Institutional ID</span>
-                                                    <p className="font-black text-slate-900 text-sm uppercase">{selectedDoc.regNo || selectedDoc.studentId?.regNo}</p>
+                                                <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                                                    <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-1">ID NUMBER</span>
+                                                    <p className="font-black text-slate-900 text-xs tracking-wider">{selectedDoc.regNo || selectedDoc.studentId?.regNo}</p>
                                                 </div>
-                                                <div className="bg-slate-50/50 p-4 rounded-2xl border border-slate-100">
-                                                    <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-1">Department</span>
-                                                    <p className="font-black text-blue-600 text-sm">{selectedDoc.department || 'N/A'}</p>
+                                                <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                                                    <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-1">DEPARTMENT</span>
+                                                    <p className="font-black text-blue-600 text-[10px] uppercase">{selectedDoc.department || 'GENERAL'}</p>
                                                 </div>
                                             </div>
-                                            <div className="flex items-center space-x-4">
-                                                <div className="flex-1 flex items-center space-x-2 text-[10px] font-bold text-slate-500 truncate">
+                                            <div className="flex flex-col space-y-2 px-1">
+                                                <div className="flex items-center space-x-2 text-[10px] font-bold text-slate-500">
                                                     <FaEnvelope className="text-blue-400 shrink-0" />
                                                     <span className="truncate">{selectedDoc.email || selectedDoc.studentId?.email}</span>
                                                 </div>
@@ -260,82 +300,55 @@ const PendingDocuments = () => {
                                     <section className="space-y-6">
                                         <div className="flex items-center space-x-3 pb-3 border-b border-slate-50">
                                             <FaIdCard className="text-indigo-600" />
-                                            <h3 className="text-xs font-black uppercase tracking-widest text-slate-900">Submission Metadata</h3>
+                                            <h3 className="text-[11px] font-black uppercase tracking-widest text-slate-900">Document Meta</h3>
                                         </div>
                                         <div className="space-y-4">
-                                            <div className="flex justify-between items-center p-4 bg-indigo-50/30 rounded-2xl border border-indigo-100/50">
-                                                <div className="flex flex-col">
-                                                    <span className="text-[9px] font-black text-indigo-400 uppercase tracking-widest">Classification</span>
-                                                    <p className="font-black text-slate-900 text-sm">{selectedDoc.documentType}</p>
-                                                </div>
-                                                <div className="text-right">
-                                                    <span className="text-[9px] font-black text-indigo-400 uppercase tracking-widest">Global ID</span>
-                                                    <p className="font-mono text-xs text-indigo-700 font-bold">{selectedDoc.documentId || 'AUTH-000'}</p>
+                                            <div className="p-4 bg-indigo-50/50 rounded-2xl border border-indigo-100/50">
+                                                <div className="flex justify-between items-start mb-3">
+                                                    <div>
+                                                        <span className="text-[9px] font-black text-indigo-400 uppercase tracking-widest">Category</span>
+                                                        <p className="font-black text-indigo-900 text-sm tracking-tight">{selectedDoc.documentType}</p>
+                                                    </div>
+                                                    <div className="text-right">
+                                                        <span className="text-[9px] font-black text-indigo-400 uppercase tracking-widest">Public ID</span>
+                                                        <p className="font-mono text-[10px] text-slate-600 font-bold">{selectedDoc.documentId || 'CERT-NONE'}</p>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div className="p-4 bg-slate-900 rounded-2xl border border-slate-800 flex flex-col space-y-3">
-                                                <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest flex items-center">
-                                                    <FaFileSignature className="mr-2 text-emerald-500" /> Digital Integrity Fingerprint (SHA-256)
+                                            <div className="p-4 bg-slate-900 rounded-2xl border border-slate-800">
+                                                <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest flex items-center mb-2">
+                                                    <FaFileSignature className="mr-2 text-emerald-500" /> SHA-256 INTEGRITY HASH
                                                 </span>
-                                                <p className="text-[9px] font-mono break-all text-slate-400 leading-relaxed uppercase select-all">{selectedDoc.fileHash}</p>
+                                                <p className="text-[9px] font-mono break-all text-slate-400 leading-relaxed uppercase tracking-tighter">{selectedDoc.fileHash}</p>
                                             </div>
                                         </div>
                                     </section>
 
-                                    <section className="space-y-6 pt-4">
-                                        <div className="space-y-4">
-                                            <div className="space-y-2">
-                                                <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Evaluator Certification Remarks</label>
-                                                <textarea
-                                                    className="input-field min-h-[120px] text-sm resize-none bg-slate-50/50 border-slate-100"
-                                                    placeholder="Specify validation results, integrity findings, or institutional feedback protocol..."
-                                                    value={remarks}
-                                                    onChange={(e) => setRemarks(e.target.value)}
-                                                />
-                                            </div>
-                                            <div className="flex space-x-4 pt-2">
-                                                <button
-                                                    onClick={() => handleVerify('Approved')}
-                                                    className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-5 rounded-[1.5rem] font-black uppercase tracking-[0.2em] shadow-xl shadow-emerald-500/20 active:scale-95 transition-all flex items-center justify-center text-[11px]"
-                                                >
-                                                    <FaCheckCircle className="mr-2 text-sm" /> Certify
-                                                </button>
-                                                <button
-                                                    onClick={() => handleVerify('Rejected')}
-                                                    className="flex-1 bg-rose-600 hover:bg-rose-700 text-white py-5 rounded-[1.5rem] font-black uppercase tracking-[0.2em] shadow-xl shadow-rose-500/20 active:scale-95 transition-all flex items-center justify-center text-[11px]"
-                                                >
-                                                    <FaTimesCircle className="mr-2 text-sm" /> Reject
-                                                </button>
-                                            </div>
+                                    <section className="space-y-4 pt-4">
+                                        <div className="space-y-2">
+                                            <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Official Decision Remarks</label>
+                                            <textarea
+                                                className="w-full min-h-[100px] p-4 text-sm resize-none bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-blue-500/5 focus:border-blue-500 outline-none transition-all placeholder:text-slate-300"
+                                                placeholder="Enter validation summary or rejection reason here..."
+                                                value={remarks}
+                                                onChange={(e) => setRemarks(e.target.value)}
+                                            />
+                                        </div>
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <button
+                                                onClick={() => handleVerify('Approved')}
+                                                className="bg-emerald-600 hover:bg-emerald-700 text-white py-4 rounded-2xl font-black uppercase tracking-widest shadow-xl shadow-emerald-500/10 active:scale-95 transition-all text-[10px] flex items-center justify-center"
+                                            >
+                                                <FaCheckCircle className="mr-2" /> Approve
+                                            </button>
+                                            <button
+                                                onClick={() => handleVerify('Rejected')}
+                                                className="bg-rose-600 hover:bg-rose-700 text-white py-4 rounded-2xl font-black uppercase tracking-widest shadow-xl shadow-rose-500/10 active:scale-95 transition-all text-[10px] flex items-center justify-center"
+                                            >
+                                                <FaTimesCircle className="mr-2" /> Reject
+                                            </button>
                                         </div>
                                     </section>
-                                </div>
-                            </div>
-
-                            {/* Right: High-Res Viewport */}
-                            <div className="flex-1 bg-slate-100 p-8 flex flex-col h-full">
-                                <div className="flex items-center justify-between mb-4">
-                                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] flex items-center">
-                                        <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full mr-2 animate-pulse"></span>
-                                        Document Source Render
-                                    </span>
-                                    <div className="flex space-x-2">
-                                        <div className="w-2.5 h-2.5 rounded-full bg-slate-300"></div>
-                                        <div className="w-2.5 h-2.5 rounded-full bg-slate-200"></div>
-                                        <div className="w-2.5 h-2.5 rounded-full bg-slate-100"></div>
-                                    </div>
-                                </div>
-                                <div className="flex-1 bg-slate-900 rounded-[2.5rem] border-[12px] border-slate-800 shadow-inner overflow-hidden flex items-center justify-center relative group">
-                                    {selectedDoc.filePath.endsWith('.pdf') ? (
-                                        <iframe src={`http://localhost:5000/${selectedDoc.filePath}`} className="w-full h-full" title="Document Preview"></iframe>
-                                    ) : (
-                                        <img src={`http://localhost:5000/${selectedDoc.filePath}`} alt="Document" className="max-w-full max-h-full object-contain group-hover:scale-[1.02] transition-transform duration-700 cursor-zoom-in" />
-                                    )}
-                                    <div className="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-slate-950/80 to-transparent flex justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <span className="px-4 py-2 bg-white/10 backdrop-blur-md rounded-full text-[9px] font-black text-white/50 border border-white/10 uppercase tracking-widest">
-                                            Interactive Viewport Port Activated
-                                        </span>
-                                    </div>
                                 </div>
                             </div>
                         </div>

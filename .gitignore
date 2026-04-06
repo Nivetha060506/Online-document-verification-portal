@@ -17,3 +17,5 @@ frontend/build/
 
 # Env
 .env
+backend/.env
+frontend/.env

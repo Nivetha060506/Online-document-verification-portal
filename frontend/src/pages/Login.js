@@ -13,10 +13,17 @@ const Login = () => {
     const [error, setError] = useState('');
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
+
+        console.log("LOGIN CLICKED");
+        if (e) e.preventDefault();
         setError('');
         try {
-            const endpoint = role === 'admin' ? '/auth/admin/login' : '/auth/login';
+            // const endpoint = role === 'admin' ? '/auth/admin/login' : '/auth/login';
+            const endpoint = role === 'admin'
+                ? '/api/auth/admin/login'
+                : '/api/auth/login';
+            // const endpoint = "/api/auth/login";
+            console.log("USING NEW ENDPOINT:", endpoint);
             const res = await api.post(endpoint, { email, password });
 
             localStorage.setItem('token', res.data.token);
@@ -101,7 +108,11 @@ const Login = () => {
                             name="password"
                         />
                     </div>
-                    <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">
+                    <button
+                        type="button"
+                        onClick={handleSubmit}
+                        className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+                    >
                         Login
                     </button>
 

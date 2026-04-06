@@ -39,11 +39,11 @@ const Sidebar = ({ role }) => {
         <div className="w-72 h-screen bg-slate-950 text-white fixed top-0 left-0 flex flex-col shadow-2xl z-30 border-r border-white/5">
             {/* Branding Section */}
             <div className="p-8 pb-10 flex items-center space-x-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-700 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/20">
-                    <FaShieldAlt className="text-white text-xl" />
+                <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/10 overflow-hidden border border-white/10">
+                    <img src="/logo.png" alt="Doc Verify Logo" className="w-full h-full object-cover" />
                 </div>
                 <div>
-                    <span className="text-xl font-black tracking-tighter text-white block leading-none">VERIFY</span>
+                    <span className="text-xl font-black tracking-tighter text-white block leading-none">DOC VERIFY</span>
                     <span className="text-[10px] font-black text-blue-400 uppercase tracking-[0.3em] mt-1 block">Institutional</span>
                 </div>
             </div>

@@ -66,23 +66,10 @@ exports.loginUser = async (req, res) => {
         // 2. Find User
         let user = await User.findOne({ email });
 
-        // 3. Auto-Register if User doesn't exist
+        // 3. Fail if User doesn't exist
         if (!user) {
-            console.log(`[AUTH] User not found (${email}). Initiating Auto-Registration.`);
-
-            // Derive basic info from email
-            const nameFromEmail = email.split('@')[0].charAt(0).toUpperCase() + email.split('@')[0].slice(1);
-
-            user = new User({
-                name: nameFromEmail,
-                email: email,
-                password: password, // Will be hashed by pre-save hook
-                regNo: `TEMP-${Date.now().toString().slice(-6)}`, // Placeholder Registration Number
-                department: 'General' // Default Department
-            });
-
-            await user.save();
-            console.log(`[AUTH] Auto-Registration successful for student: ${email}`);
+            console.log(`[AUTH] Login failed: User not found (${email})`);
+            return res.status(401).json({ message: 'Invalid Email or Password' });
         } else {
             // 4. Verify Password for existing users
             const isMatch = await user.matchPassword(password);
@@ -142,16 +129,10 @@ exports.loginAdmin = async (req, res) => {
         // 2. Find Admin
         let admin = await Admin.findOne({ email });
 
-        // 3. Auto-Register if Admin doesn't exist
+        // 3. Fail if Admin doesn't exist
         if (!admin) {
-            console.log(`[AUTH] Admin not found (${email}). Initiating Auto-Registration.`);
-            admin = new Admin({
-                email,
-                password // Will be hashed by pre-save hook
-            });
-
-            await admin.save();
-            console.log(`[AUTH] Auto-Registration successful for admin: ${email}`);
+            console.log(`[AUTH] Admin login failed: Admin not found (${email})`);
+            return res.status(401).json({ message: 'Invalid Email or Password' });
         } else {
             // 4. Verify Password for existing admins
             const isMatch = await admin.matchPassword(password);

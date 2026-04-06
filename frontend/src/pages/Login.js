@@ -18,12 +18,7 @@ const Login = () => {
         if (e) e.preventDefault();
         setError('');
         try {
-            // const endpoint = role === 'admin' ? '/auth/admin/login' : '/auth/login';
-            const endpoint = role === 'admin'
-                ? '/api/auth/admin/login'
-                : '/api/auth/login';
-            // const endpoint = "/api/auth/login";
-            console.log("USING NEW ENDPOINT:", endpoint);
+            const endpoint = role === 'admin' ? '/auth/admin/login' : '/auth/login';
             const res = await api.post(endpoint, { email, password });
 
             localStorage.setItem('token', res.data.token);

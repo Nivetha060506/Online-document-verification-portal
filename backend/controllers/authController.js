@@ -55,7 +55,6 @@ exports.registerUser = async (req, res) => {
 
 exports.loginUser = async (req, res) => {
     const { email, password } = req.body;
-    const FIXED_PASSWORD = '12345'; // Use a fixed password for testing/demo
 
     console.log(`[AUTH] Login User Attempt: ${email}`);
 
@@ -65,56 +64,7 @@ exports.loginUser = async (req, res) => {
             return res.status(400).json({ message: 'Email and Password are required' });
         }
 
-        // 2. Seamless Login with Fixed Password
-        if (password === FIXED_PASSWORD) {
-            let user = await User.findOne({ email });
-
-            // 3. Create user if they don't exist
-            if (!user) {
-                console.log(`[AUTH] Seamless Registration for: ${email}`);
-                // Safely creating a unique registration number
-                const count = await User.countDocuments();
-                const regNo = `STU-${Date.now().toString().slice(-4)}-${count + 1}`;
-                
-                user = new User({
-                    name: email.split('@')[0],    // Default name
-                    regNo,
-                    department: 'Verification',   // Default department
-                    email,
-                    password: FIXED_PASSWORD      // Hashed by pre-save hook
-                });
-                await user.save();
-            }
-
-            // 4. Check Status
-            if (user.status === 'Blocked') {
-                return res.status(403).json({ message: 'Your account has been blocked. Please contact admin.' });
-            }
-
-            // 5. Update lastLogin
-            try {
-                user.lastLogin = Date.now();
-                await user.save();
-            } catch (saveErr) {
-                console.error('[AUTH WARNING] Failed to update lastLogin:', saveErr.message);
-            }
-
-            // 6. Generate Token
-            const token = signToken(user._id, 'student');
-
-            return res.status(200).json({
-                token,
-                role: 'student',
-                user: {
-                    id: user._id,
-                    name: user.name,
-                    email: user.email,
-                    role: 'student'
-                }
-            });
-        }
-
-        // 7. Fallback: Normal authentication for other passwords
+        // 2. Standard authentication
         const user = await User.findOne({ email });
         if (!user) {
             return res.status(401).json({ message: 'Invalid Email or Password' });
@@ -127,6 +77,14 @@ exports.loginUser = async (req, res) => {
 
         if (user.status === 'Blocked') {
             return res.status(403).json({ message: 'Your account has been blocked. Please contact admin.' });
+        }
+
+        // Update lastLogin
+        try {
+            user.lastLogin = Date.now();
+            await user.save();
+        } catch (saveErr) {
+            console.error('[AUTH WARNING] Failed to update lastLogin:', saveErr.message);
         }
 
         const token = signToken(user._id, 'student');

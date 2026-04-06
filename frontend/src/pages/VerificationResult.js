@@ -160,7 +160,7 @@ const VerificationResult = () => {
                                 disabled={loading}
                                 className="w-full py-5 bg-blue-600 text-white rounded-2xl text-[11px] font-black uppercase tracking-[0.4em] hover:bg-blue-700 transition-all active:scale-[0.98] shadow-2xl shadow-blue-500/30 disabled:opacity-50"
                             >
-                                {loading ? 'Scanning Blockchain...' : 'Search Repository'}
+                                {loading ? 'Checking Records...' : 'Search Repository'}
                             </button>
                         </div>
                     </form>
@@ -174,7 +174,7 @@ const VerificationResult = () => {
                                 <FaShieldAlt className="text-blue-100 text-xl" />
                             </div>
                         </div>
-                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">Decrypting Certificate Hash...</p>
+                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">Validating Certificate Hash...</p>
                     </div>
                 )}
 
@@ -202,7 +202,7 @@ const VerificationResult = () => {
                     <div className="w-8 h-[1px] bg-slate-400"></div>
                     <div className="w-1.5 h-1.5 bg-slate-400 rounded-full"></div>
                 </div>
-                <p className="text-[10px] font-black text-slate-300 uppercase tracking-[0.4em]">ODV Secure Network • Institutional Integrity Protocol</p>
+                <p className="text-[10px] font-black text-slate-300 uppercase tracking-[0.4em]">ODV Secure Network • Institutional Verification Tool</p>
             </footer>
         </div>
     );

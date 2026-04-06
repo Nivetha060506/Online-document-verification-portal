@@ -78,7 +78,7 @@ const Login = () => {
                             className="w-full px-3 py-2 border rounded focus:outline-none focus:border-blue-500"
                             required
                             autoComplete="off"
-                            name="email_field_random" // Random name to further discourage autofill
+                            name="email"
                         />
                     </div>
                     <div className="mb-6">
@@ -90,7 +90,7 @@ const Login = () => {
                             className="w-full px-3 py-2 border rounded focus:outline-none focus:border-blue-500"
                             required
                             autoComplete="new-password"
-                            name="password_field_random"
+                             name="password"
                         />
                     </div>
                     <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">
@@ -106,6 +106,7 @@ const Login = () => {
                                 <span className="px-2 bg-white text-gray-500">Or continue with</span>
                             </div>
                         </div>
+                        {/* 
                         <div className="mt-4 flex justify-center">
                             <GoogleLogin
                                 onSuccess={handleGoogleSuccess}
@@ -115,6 +116,7 @@ const Login = () => {
                                 }}
                             />
                         </div>
+                        */}
                     </div>
                 </form>
                 {role === 'student' && (

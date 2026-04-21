@@ -1,0 +1,15 @@
+{
+  "name": "odv-portal",
+  "version": "1.0.0",
+  "description": "Root package.json to deploy MERN to Render",
+  "main": "backend/server.js",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "start": "cd backend && npm start",
+    "build": "npm run build-frontend && npm run build-backend",
+    "build-frontend": "cd frontend && npm install && npm run build",
+    "build-backend": "cd backend && npm install"
+  }
+}

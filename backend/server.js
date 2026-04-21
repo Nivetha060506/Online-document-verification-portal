@@ -50,7 +50,9 @@ app.get('/health', (req, res) => {
 const path = require('path');
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, '../frontend/build')));
-    app.get('*', (req, res) => {
+    app.use((req, res, next) => {
+        if (req.method !== 'GET') return next();
+        
         // Exclude API routes from falling back to index.html if they fail
         if (req.path.startsWith('/api/') || req.path.startsWith('/uploads/')) {
             return res.status(404).json({ message: 'API route not found' });
